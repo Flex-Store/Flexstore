@@ -140,10 +140,12 @@
     .jesus-img {
       width: 100%;
       max-height: 450px;
-      object-fit: cover;
+      object-fit: contain;
+      background: #ffffff;
       border-radius: 16px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.12);
       margin-bottom: 12px;
+      padding: 10px;
     }
     .jesus-caption {
       font-family: 'Cormorant Garamond', serif;
@@ -229,11 +231,12 @@
       <div class="bible-ref-badge" id="meaningBadge">Bibelstelle</div>
     </div>
 
-   <div class="jesus-section">
-      <!-- Hier ist jetzt dein hochgeladenes Jesus-Bild eingebunden -->
-      <img src="jesus-lamm.jpg" alt="Jesus hält ein Lamm" class="jesus-img">
+    <div class="jesus-section">
+      <!-- Hier wird dein hochgeladenes jesus.png eingebunden -->
+      <img src="jesus.png" alt="Jesus Christus" class="jesus-img">
       <div class="jesus-caption">„Ich bin das Licht der Welt. Wer mir nachfolgt, wird nicht in der Finsternis wandeln.“</div>
     </div>
+  </div>
 
   <script>
     const blessings = {
