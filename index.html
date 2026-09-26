@@ -300,6 +300,9 @@
       const nameParam = urlParams.get('name');
       const datumParam = urlParams.get('datum');
 
+      // Standardmäßig immer 11. Oktober 2026 festlegen
+      document.getElementById('dateDisplay').innerText = datumParam ? datumParam : "11. Oktober 2026";
+
       if (nameParam) {
         let cleanName = decodeURIComponent(nameParam).toLowerCase().trim();
         
@@ -321,10 +324,6 @@
         document.getElementById('meaningTitle').innerText = meanings["estera"].title;
         document.getElementById('meaningContent').innerHTML = meanings["estera"].text;
         document.getElementById('meaningBadge').innerText = meanings["estera"].badge;
-      }
-      
-      if (datumParam) {
-        document.getElementById('dateDisplay').innerText = datumParam;
       }
     } catch (e) {
       console.log("Fehler beim Verarbeiten der Parameter:", e);
