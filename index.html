@@ -298,10 +298,9 @@
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const nameParam = urlParams.get('name');
-      const datumParam = urlParams.get('datum');
 
-      // Standardmäßig immer 11. Oktober 2026 festlegen
-      document.getElementById('dateDisplay').innerText = datumParam ? datumParam : "11. Oktober 2026";
+      // Immer 11. Oktober 2026 als festes Datum nutzen
+      document.getElementById('dateDisplay').innerText = "11. Oktober 2026";
 
       if (nameParam) {
         let cleanName = decodeURIComponent(nameParam).toLowerCase().trim();
