@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Glückwunsch zur Taufe</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -42,22 +42,32 @@
       border: 1px solid rgba(255, 255, 255, 0.7);
       animation: cardAppear 0.8s ease-out forwards;
     }
-    .dove-container {
-      font-size: 55px;
-      margin-bottom: 5px;
+    .dove-wrapper {
+      position: relative;
       display: inline-block;
       cursor: pointer;
-      user-select: none;
-      animation: flyIn 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards, gentleFloat 4s ease-in-out infinite 1.5s;
+      margin-bottom: 8px;
     }
-    .dove-container:active {
+    .dove-container {
+      font-size: 60px;
+      display: inline-block;
+      user-select: none;
+      animation: flyIn 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards, gentleFloat 3s ease-in-out infinite 1.5s;
+    }
+    .dove-wrapper:active .dove-container {
       transform: scale(0.88);
     }
     .tap-hint {
-      font-size: 11px;
-      color: #718096;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #2b6cb0;
+      background: rgba(235, 248, 255, 0.9);
+      padding: 4px 12px;
+      border-radius: 12px;
+      margin: 0 auto 14px auto;
+      display: inline-block;
+      letter-spacing: 0.3px;
+      border: 1px solid rgba(43, 108, 176, 0.2);
     }
     h1 {
       font-family: 'Cormorant Garamond', serif;
@@ -102,8 +112,12 @@
     .verse-box {
       background: rgba(255, 255, 255, 0.92);
       border-radius: 16px;
-      padding: 18px 15px;
+      padding: 20px 15px;
       box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
     }
     .verse-text {
       font-family: 'Cormorant Garamond', serif;
@@ -111,7 +125,6 @@
       color: #2d3748;
       font-style: italic;
       line-height: 1.4;
-      margin-bottom: 8px;
       min-height: 50px;
       display: flex;
       align-items: center;
@@ -125,6 +138,28 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       transition: opacity 0.25s ease;
+    }
+
+    /* Interaktiver Button für weiteren Vers */
+    .btn-next-verse {
+      background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      animation: pulseBtn 2s infinite;
+    }
+    .btn-next-verse:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 6px rgba(43, 108, 176, 0.2);
     }
 
     /* Jesus Bild Sektion */
@@ -195,6 +230,10 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-6px); }
     }
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3); }
+      50% { transform: scale(1.04); box-shadow: 0 6px 18px rgba(43, 108, 176, 0.5); }
+    }
     @keyframes cardAppear {
       0% { opacity: 0; transform: translateY(15px); }
       100% { opacity: 1; transform: translateY(0); }
@@ -205,8 +244,12 @@
 
   <div class="wrapper">
     <div class="card">
-      <div class="dove-container" onclick="nextVerse()" title="Klicke auf die Taube">🕊️</div>
-      <div class="tap-hint">✨ Tippe auf die Taube für einen neuen Vers</div>
+      <div class="dove-wrapper" onclick="nextVerse()" title="Klicke auf die Taube">
+        <div class="dove-container">🕊️</div>
+      </div>
+      <div>
+        <div class="tap-hint">✨ Tippe auf die Taube oder den Button unten</div>
+      </div>
       
       <h1>Glückwunsch zur Taufe</h1>
       <div class="subtitle">Segen für</div>
@@ -214,12 +257,16 @@
       <div class="date-badge" id="dateDisplay">11. Oktober 2026</div>
 
       <div class="blessing-text" id="blessingDisplay">
-        Möge der Heilige Geist dein Herz stets mit seiner unendlichen Liebe, Seiner Weisheit und Seiner unerschütterlichen Freude erfüllen.
+        Möge der Heilige Geist dein Herz stets mit Seinem göttlichen Licht, Seiner Weisheit und Seiner unerschütterlichen Freude erfüllen.
       </div>
 
       <div class="verse-box">
         <div class="verse-text" id="verseText">„Gott hat seinen Engeln befohlen, dass sie dich behüten auf allen deinen Wegen.“</div>
         <div class="verse-ref" id="verseRef">Psalm 91,11</div>
+        
+        <button class="btn-next-verse" onclick="nextVerse()">
+          <span>✨ Nächsten Vers anzeigen</span>
+        </button>
       </div>
     </div>
 
@@ -239,9 +286,11 @@
 
   <script>
     const blessings = {
-      "estera": "Möge Jesus immer bei dir sein, dass du nie dich nie alleine fühlst oder traurig! Glückwunsch zur Taufe!.",
-      "jessica": "Glückwunsch Jessica zur Taufe!, bleib immer neben Jesus weil nur er dich immer bedingungs loslieben wird.",
-      "elissa miriam": "Es freut mich zu sehen dass du die wichtigste Entscheidung deines Lebens getroffen hast, mach Jesus stolz."
+      "estera": "Möge Jesus immer bei dir sein, dass du dich nie alleine fühlst oder traurig bist! Glückwunsch zur Taufe!",
+      "jessica": "Glückwunsch Jessica zur Taufe! Bleib immer neben Jesus, weil nur er dich immer bedingungslos lieben wird.",
+      "elissa": "Es freut mich zu sehen, dass du die wichtigste Entscheidung deines Lebens getroffen hast. Mach Jesus stolz!",
+      "elissa-miriam": "Es freut mich zu sehen, dass du die wichtigste Entscheidung deines Lebens getroffen hast. Mach Jesus stolz!",
+      "elissa miriam": "Es freut mich zu sehen, dass du die wichtigste Entscheidung deines Lebens getroffen hast. Mach Jesus stolz!"
     };
 
     const meanings = {
@@ -297,7 +346,6 @@
       const urlParams = new URLSearchParams(window.location.search);
       const nameParam = urlParams.get('name');
 
-      // Immer 11. Oktober 2026 als festes Datum nutzen
       document.getElementById('dateDisplay').innerText = "11. Oktober 2026";
 
       if (nameParam) {
@@ -340,6 +388,15 @@
         verseText.style.opacity = '1';
         verseRef.style.opacity = '1';
       }, 200);
+
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 15,
+          spread: 40,
+          origin: { y: 0.6 },
+          colors: ['#8ec5fc', '#e0c3fc', '#ffffff']
+        });
+      }
     }
 
     window.addEventListener('load', () => {
