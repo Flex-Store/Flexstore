@@ -232,7 +232,6 @@
     </div>
 
     <div class="jesus-section">
-      <!-- Hier wird dein hochgeladenes jesus.png eingebunden -->
       <img src="jesus.png" alt="Jesus Christus" class="jesus-img">
       <div class="jesus-caption">„Ich bin das Licht der Welt. Wer mir nachfolgt, wird nicht in der Finsternis wandeln.“</div>
     </div>
@@ -242,7 +241,9 @@
     const blessings = {
       "estera": "Möge der Heilige Geist dein Herz stets mit Seinem göttlichen Licht, Seiner Weisheit und Seiner unerschütterlichen Freude erfüllen. Geh mutig und voller Vertrauen durchs Leben – stets getragen von Gottes unendlicher Gnade.",
       "jessica": "Gott segne dich reichlich an diesem besonderen Tag deines Glaubens. Mögest du als lebendiger Tempel des Heiligen Geistes heranwachsen – erfüllt mit tiefem Frieden, echter Hoffnung und tiefer Liebe.",
-      "elissa-miriam": "Auch wenn du mich nicht mehr liebst, so tut es Jesus jeden Tag und das mehr als jeder andere."
+      "elissa": "Auch wenn du mich nicht mehr liebst, so tut es Jesus jeden Tag und das mehr als jeder andere.",
+      "elissa-miriam": "Auch wenn du mich nicht mehr liebst, so tut es Jesus jeden Tag und das mehr als jeder andere.",
+      "elissa miriam": "Auch wenn du mich nicht mehr liebst, so tut es Jesus jeden Tag und das mehr als jeder andere."
     };
 
     const meanings = {
@@ -256,7 +257,17 @@
         text: "Der Name Jessica leitet sich vom hebräischen Namen **Jiska** ab. In **1. Mose 11,29** ist Jiska die Nichte Abrahams. Der Name bedeutet übersetzt **'Gott sieht'** oder **'Gott blickt aus'**. Er erinnert daran, dass Gott sein Auge immer voller Liebe auf dich gerichtet hat und dich nie aus den Augen verliert.",
         badge: "📖 1. Mose 11,29"
       },
+      "elissa": {
+        title: "Prophetin Miriam & Gottes Fülle",
+        text: "Dein Doppelname trägt zwei tiefgründige biblische Erbe: **Miriam** war die prophetische Schwester von Mose und Aaron (**2. Mose 15**), die Gottes Rettung am Schilfmeer voller Freude tanzend und singend preiste. **Elissa** leitet sich von Elisheba ab und bedeutet **'Gott ist mein Schwur'** und **'Gott ist Fülle'**.",
+        badge: "📖 2. Mose 15,20 & 2. Mose 6,23"
+      },
       "elissa-miriam": {
+        title: "Prophetin Miriam & Gottes Fülle",
+        text: "Dein Doppelname trägt zwei tiefgründige biblische Erbe: **Miriam** war die prophetische Schwester von Mose und Aaron (**2. Mose 15**), die Gottes Rettung am Schilfmeer voller Freude tanzend und singend preiste. **Elissa** leitet sich von Elisheba ab und bedeutet **'Gott ist mein Schwur'** und **'Gott ist Fülle'**.",
+        badge: "📖 2. Mose 15,20 & 2. Mose 6,23"
+      },
+      "elissa miriam": {
         title: "Prophetin Miriam & Gottes Fülle",
         text: "Dein Doppelname trägt zwei tiefgründige biblische Erbe: **Miriam** war die prophetische Schwester von Mose und Aaron (**2. Mose 15**), die Gottes Rettung am Schilfmeer voller Freude tanzend und singend preiste. **Elissa** leitet sich von Elisheba ab und bedeutet **'Gott ist mein Schwur'** und **'Gott ist Fülle'**.",
         badge: "📖 2. Mose 15,20 & 2. Mose 6,23"
@@ -284,30 +295,34 @@
       { text: "Der Herr behüte deinen Ausgang und Eingang von nun an bis in Ewigkeit.", ref: "Psalm 121,8" }
     ];
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const nameParam = urlParams.get('name');
-    const datumParam = urlParams.get('datum');
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const nameParam = urlParams.get('name');
+      const datumParam = urlParams.get('datum');
 
-    if (nameParam) {
-      document.getElementById('nameDisplay').innerText = nameParam;
-      const cleanName = nameParam.toLowerCase().trim();
+      if (nameParam) {
+        document.getElementById('nameDisplay').innerText = nameParam;
+        const cleanName = decodeURIComponent(nameParam).toLowerCase().trim();
+        
+        if (blessings[cleanName]) {
+          document.getElementById('blessingDisplay').innerText = blessings[cleanName];
+        }
+        if (meanings[cleanName]) {
+          document.getElementById('meaningTitle').innerText = meanings[cleanName].title;
+          document.getElementById('meaningContent').innerHTML = meanings[cleanName].text;
+          document.getElementById('meaningBadge').innerText = meanings[cleanName].badge;
+        }
+      } else {
+        document.getElementById('meaningTitle').innerText = meanings["estera"].title;
+        document.getElementById('meaningContent').innerHTML = meanings["estera"].text;
+        document.getElementById('meaningBadge').innerText = meanings["estera"].badge;
+      }
       
-      if (blessings[cleanName]) {
-        document.getElementById('blessingDisplay').innerText = blessings[cleanName];
+      if (datumParam) {
+        document.getElementById('dateDisplay').innerText = datumParam;
       }
-      if (meanings[cleanName]) {
-        document.getElementById('meaningTitle').innerText = meanings[cleanName].title;
-        document.getElementById('meaningContent').innerHTML = meanings[cleanName].text;
-        document.getElementById('meaningBadge').innerText = meanings[cleanName].badge;
-      }
-    } else {
-      document.getElementById('meaningTitle').innerText = meanings["estera"].title;
-      document.getElementById('meaningContent').innerHTML = meanings["estera"].text;
-      document.getElementById('meaningBadge').innerText = meanings["estera"].badge;
-    }
-    
-    if (datumParam) {
-      document.getElementById('dateDisplay').innerText = datumParam;
+    } catch (e) {
+      console.log("Fehler beim Verarbeiten der Parameter:", e);
     }
 
     function nextVerse() {
@@ -327,12 +342,14 @@
     }
 
     window.addEventListener('load', () => {
-      confetti({
-        particleCount: 25,
-        spread: 60,
-        origin: { y: 0.7 },
-        colors: ['#8ec5fc', '#e0c3fc', '#ffffff']
-      });
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 25,
+          spread: 60,
+          origin: { y: 0.7 },
+          colors: ['#8ec5fc', '#e0c3fc', '#ffffff']
+        });
+      }
     });
   </script>
 
