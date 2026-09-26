@@ -211,7 +211,7 @@
       <h1>Glückwunsch zur Taufe</h1>
       <div class="subtitle">Segen für</div>
       <div class="name" id="nameDisplay">Estera</div>
-      <div class="date-badge" id="dateDisplay">20. September 2026</div>
+      <div class="date-badge" id="dateDisplay">11. Oktober 2026</div>
 
       <div class="blessing-text" id="blessingDisplay">
         Möge der Heilige Geist dein Herz stets mit Seinem göttlichen Licht, Seiner Weisheit und Seiner unerschütterlichen Freude erfüllen.
@@ -249,27 +249,27 @@
     const meanings = {
       "estera": {
         title: "Königin Ester in der Bibel",
-        text: "Der Name Estera geht auf die biblische **Königin Ester** zurück. Im Buch Ester beschreibt die Bibel eine mutige, gottesfürchtige Frau, die ihr gesamtes Volk durch ihren starken Glauben und ihr Vertrauen auf Gott vor dem Untergang rettete. Ihr Name bedeutet 'Stern' – ein helles Licht in dunklen Zeiten.",
+        text: "Der Name Estera geht auf die biblische Königin Ester zurück. Im Buch Ester beschreibt die Bibel eine mutige, gottesfürchtige Frau, die ihr gesamtes Volk durch ihren starken Glauben und ihr Vertrauen auf Gott vor dem Untergang rettete. Ihr Name bedeutet 'Stern' – ein helles Licht in dunklen Zeiten.",
         badge: "📖 Buch Ester"
       },
       "jessica": {
         title: "Bedeutung von Jessica (Jiska)",
-        text: "Der Name Jessica leitet sich vom hebräischen Namen **Jiska** ab. In **1. Mose 11,29** ist Jiska die Nichte Abrahams. Der Name bedeutet übersetzt **'Gott sieht'** oder **'Gott blickt aus'**. Er erinnert daran, dass Gott sein Auge immer voller Liebe auf dich gerichtet hat und dich nie aus den Augen verliert.",
+        text: "Der Name Jessica leitet sich vom hebräischen Namen Jiska ab. In 1. Mose 11,29 ist Jiska die Nichte Abrahams. Der Name bedeutet übersetzt 'Gott sieht' oder 'Gott blickt aus'. Er erinnert daran, dass Gott sein Auge immer voller Liebe auf dich gerichtet hat und dich nie aus den Augen verliert.",
         badge: "📖 1. Mose 11,29"
       },
       "elissa": {
         title: "Prophetin Miriam & Gottes Fülle",
-        text: "Dein Doppelname trägt zwei tiefgründige biblische Erbe: **Miriam** war die prophetische Schwester von Mose und Aaron (**2. Mose 15**), die Gottes Rettung am Schilfmeer voller Freude tanzend und singend preiste. **Elissa** leitet sich von Elisheba ab und bedeutet **'Gott ist mein Schwur'** und **'Gott ist Fülle'**.",
+        text: "Dein Doppelname trägt zwei tiefgründige biblische Erbe: Miriam war die prophetische Schwester von Mose und Aaron (2. Mose 15), die Gottes Rettung am Schilfmeer voller Freude tanzend und singend preiste. Elissa leitet sich von Elisheba ab und bedeutet 'Gott ist mein Schwur' und 'Gott ist Fülle'.",
         badge: "📖 2. Mose 15,20 & 2. Mose 6,23"
       },
       "elissa-miriam": {
         title: "Prophetin Miriam & Gottes Fülle",
-        text: "Dein Doppelname trägt zwei tiefgründige biblische Erbe: **Miriam** war die prophetische Schwester von Mose und Aaron (**2. Mose 15**), die Gottes Rettung am Schilfmeer voller Freude tanzend und singend preiste. **Elissa** leitet sich von Elisheba ab und bedeutet **'Gott ist mein Schwur'** und **'Gott ist Fülle'**.",
+        text: "Dein Doppelname trägt zwei tiefgründige biblische Erbe: Miriam war die prophetische Schwester von Mose und Aaron (2. Mose 15), die Gottes Rettung am Schilfmeer voller Freude tanzend und singend preiste. Elissa leitet sich von Elisheba ab und bedeutet 'Gott ist mein Schwur' und 'Gott ist Fülle'.",
         badge: "📖 2. Mose 15,20 & 2. Mose 6,23"
       },
       "elissa miriam": {
         title: "Prophetin Miriam & Gottes Fülle",
-        text: "Dein Doppelname trägt zwei tiefgründige biblische Erbe: **Miriam** war die prophetische Schwester von Mose und Aaron (**2. Mose 15**), die Gottes Rettung am Schilfmeer voller Freude tanzend und singend preiste. **Elissa** leitet sich von Elisheba ab und bedeutet **'Gott ist mein Schwur'** und **'Gott ist Fülle'**.",
+        text: "Dein Doppelname trägt zwei tiefgründige biblische Erbe: Miriam war die prophetische Schwester von Mose und Aaron (2. Mose 15), die Gottes Rettung am Schilfmeer voller Freude tanzend und singend preiste. Elissa leitet sich von Elisheba ab und bedeutet 'Gott ist mein Schwur' und 'Gott ist Fülle'.",
         badge: "📖 2. Mose 15,20 & 2. Mose 6,23"
       }
     };
@@ -301,9 +301,14 @@
       const datumParam = urlParams.get('datum');
 
       if (nameParam) {
-        document.getElementById('nameDisplay').innerText = nameParam;
-        const cleanName = decodeURIComponent(nameParam).toLowerCase().trim();
+        let cleanName = decodeURIComponent(nameParam).toLowerCase().trim();
         
+        if (cleanName === 'elissa') {
+          document.getElementById('nameDisplay').innerText = "Elissa-Miriam";
+        } else {
+          document.getElementById('nameDisplay').innerText = nameParam;
+        }
+
         if (blessings[cleanName]) {
           document.getElementById('blessingDisplay').innerText = blessings[cleanName];
         }
