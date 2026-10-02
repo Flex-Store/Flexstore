@@ -3,222 +3,117 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Tageskalender — Ein Impuls für dich</title>
+  <title>Dein täglicher Faith-Moment</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-:root {
-  color-scheme: light;
-  --ink: #20352d;
-  --muted: #748078;
-  --green: #244b3d;
-  --green-dark: #18392e;
-  --lime: #dce9bd;
-  --paper: #f8f6ef;
-  --line: rgba(32, 53, 45, .12);
-  --serif: "Cormorant Garamond", Georgia, serif;
-  --sans: "Plus Jakarta Sans", sans-serif;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body {
-  min-height: 100vh; padding: 42px 24px; display: grid; place-items: center; overflow-x: hidden;
-  color: var(--ink); font-family: var(--sans);
-  background: radial-gradient(ellipse at 12% 14%, rgba(220,233,189,.62), transparent 32%),
-              radial-gradient(ellipse at 92% 84%, rgba(207,221,205,.72), transparent 34%), #edf0e8;
-}
-body::before, body::after { content: ""; position: fixed; z-index: -1; border: 1px solid rgba(36,75,61,.08); border-radius: 50%; pointer-events:none; }
-body::before { width: 520px; height: 520px; top: -290px; right: -150px; }
-body::after { width: 680px; height: 680px; bottom: -470px; left: -250px; }
-.wrapper { width: min(100%, 780px); }
-.card {
-  position: relative; overflow: hidden; padding: clamp(28px, 6vw, 64px); border-radius: 30px;
-  background: rgba(250,249,244,.94); border: 1px solid rgba(255,255,255,.9);
-  box-shadow: 0 28px 80px rgba(35,58,47,.12), 0 2px 8px rgba(35,58,47,.04);
-  text-align: center;
-}
-.card::before { content:""; position:absolute; inset:0 0 auto; height:5px; background:linear-gradient(90deg,#9eb67c,#315b48 48%,#d9c58f); }
-.icon { display:grid; place-items:center; width:62px; height:62px; margin:0 auto 20px; border-radius:22px; color:var(--green); background:#e9efdf; font-size:30px; animation: float 5s ease-in-out infinite; }
-h1 { font-family:var(--serif); font-size:clamp(40px,7vw,58px); line-height:.95; letter-spacing:-.035em; color:var(--green-dark); font-weight:600; }
-.subtitle { margin:12px 0 34px; color:var(--muted); font-size:10px; font-weight:700; letter-spacing:.19em; text-transform:uppercase; }
-#startScreen { max-width:490px; margin:0 auto; padding:30px 0 8px; border-top:1px solid var(--line); }
-#startScreen p { max-width:390px; margin:0 auto 26px !important; color:#65736a !important; font-size:15px !important; line-height:1.8 !important; }
-.btn-ok { display:inline-flex; justify-content:center; align-items:center; gap:12px; width:auto; min-height:58px; padding:0 28px; color:#fff; background:var(--green); border:0; border-radius:999px; font:700 13px var(--sans); letter-spacing:.015em; cursor:pointer; box-shadow:0 12px 24px rgba(36,75,61,.2); transition:transform .2s, background .2s, box-shadow .2s; }
-.btn-ok::after { content:"↗"; font-size:17px; transition:transform .2s; }
-.btn-ok:hover { background:#315f4c; transform:translateY(-2px); box-shadow:0 16px 30px rgba(36,75,61,.24); }
-.btn-ok:hover::after { transform:translate(2px,-2px); }
-.btn-ok:active { transform:scale(.98); }
-.btn-ok:focus-visible { outline:3px solid #a5bc82; outline-offset:4px; }
-#verseScreen { max-width:570px; margin:0 auto; animation: reveal .6s cubic-bezier(.2,.8,.2,1) both; }
-.date-badge { display:inline-flex; align-items:center; gap:9px; padding:9px 15px; margin:0 0 20px; color:var(--green); background:#edf1e6; border:1px solid #dce5d3; border-radius:999px; font-size:11px; font-weight:700; letter-spacing:.04em; }
-.date-badge::before { content:""; width:7px; height:7px; border-radius:50%; background:#7f9b63; box-shadow:0 0 0 3px rgba(127,155,99,.14); }
-.verse-box { position:relative; padding:32px clamp(22px,5vw,46px) 26px; margin-bottom:14px; overflow:hidden; color:#fff; background:linear-gradient(145deg,#2e5a47,#1f4236 72%); border-radius:22px; text-align:left; box-shadow:0 18px 35px rgba(27,63,48,.16); }
-.verse-box::before { content:"“"; position:absolute; top:-27px; right:18px; color:rgba(220,233,189,.13); font:180px/.9 var(--serif); }
-.verse-text { position:relative; margin-bottom:20px; font:italic 400 clamp(25px,4.5vw,34px)/1.27 var(--serif); color:#fbfaf4; }
-.verse-ref { position:relative; padding-top:14px; border-top:1px solid rgba(255,255,255,.2); color:#dce9bd; font-size:10px; font-weight:700; letter-spacing:.17em; text-transform:uppercase; text-align:left; }
-.task-box { padding:22px 24px; margin-bottom:0; background:#f2f1e9; border:1px solid #e8e6da; border-radius:20px; text-align:left; }
-.task-title { display:flex; align-items:center; gap:9px; margin-bottom:9px; color:#71804d; font-size:10px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; }
-.task-text { color:#48584e; font-size:14px; line-height:1.75; }
-#verseScreen > p { margin-top:22px !important; color:#899188 !important; font-size:11px !important; line-height:1.6; }
-.hidden { display:none !important; }
-@keyframes float { 0%,100% { transform:translateY(0) rotate(0); } 50% { transform:translateY(-4px) rotate(-3deg); } }
-@keyframes reveal { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-@media (max-width:600px) { body { padding:18px 14px; } .card { border-radius:24px; padding:34px 22px 30px; } .icon { width:54px; height:54px; border-radius:19px; font-size:26px; margin-bottom:17px; } .subtitle { margin-bottom:27px; } #startScreen { padding-top:24px; } .btn-ok { width:100%; padding:0 18px; } .verse-box { border-radius:18px; } .task-box { padding:19px 18px; } }
-@media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.01ms !important; } }
+:root{color-scheme:light;--ink:#20352d;--muted:#748078;--green:#244b3d;--green-dark:#18392e;--lime:#dce9bd;--paper:#f8f6ef;--line:rgba(32,53,45,.12);--serif:"Cormorant Garamond",Georgia,serif;--sans:"Plus Jakarta Sans",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}body{min-height:100vh;padding:42px 24px;display:grid;place-items:center;overflow-x:hidden;color:var(--ink);font-family:var(--sans);background:radial-gradient(ellipse at 12% 14%,rgba(220,233,189,.62),transparent 32%),radial-gradient(ellipse at 92% 84%,rgba(207,221,205,.72),transparent 34%),#edf0e8}body:before,body:after{content:"";position:fixed;z-index:-1;border:1px solid rgba(36,75,61,.08);border-radius:50%;pointer-events:none}body:before{width:520px;height:520px;top:-290px;right:-150px}body:after{width:680px;height:680px;bottom:-470px;left:-250px}.wrapper{width:min(100%,780px)}.card{position:relative;overflow:hidden;padding:clamp(28px,6vw,64px);border-radius:30px;background:rgba(250,249,244,.94);border:1px solid rgba(255,255,255,.9);box-shadow:0 28px 80px rgba(35,58,47,.12),0 2px 8px rgba(35,58,47,.04);text-align:center}.card:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,#9eb67c,#315b48 48%,#d9c58f)}
+.topbar{display:flex;justify-content:flex-end;margin:0 0 18px}.language-switch{display:inline-flex;gap:3px;padding:4px;background:#edf1e6;border:1px solid #dce5d3;border-radius:999px}.language-switch button{border:0;border-radius:999px;padding:8px 12px;background:transparent;color:#607064;font:700 11px var(--sans);cursor:pointer;transition:background .2s,color .2s}.language-switch button[aria-pressed=true]{background:var(--green);color:#fff;box-shadow:0 3px 8px rgba(36,75,61,.18)}.language-switch button:focus-visible{outline:3px solid #a5bc82;outline-offset:2px}
+.icon{display:grid;place-items:center;width:62px;height:62px;margin:0 auto 20px;border-radius:22px;color:var(--green);background:#e9efdf;font-size:30px;animation:float 5s ease-in-out infinite}h1{font-family:var(--serif);font-size:clamp(40px,7vw,58px);line-height:.95;letter-spacing:-.035em;color:var(--green-dark);font-weight:600}.subtitle{margin:12px 0 34px;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}#startScreen{max-width:490px;margin:0 auto;padding:30px 0 8px;border-top:1px solid var(--line)}#startScreen p{max-width:390px;margin:0 auto 26px!important;color:#65736a!important;font-size:15px!important;line-height:1.8!important}.btn-ok{display:inline-flex;justify-content:center;align-items:center;gap:12px;width:auto;min-height:58px;padding:0 28px;color:#fff;background:var(--green);border:0;border-radius:999px;font:700 13px var(--sans);letter-spacing:.015em;cursor:pointer;box-shadow:0 12px 24px rgba(36,75,61,.2);transition:transform .2s,background .2s,box-shadow .2s}.btn-ok:after{content:"↗";font-size:17px;transition:transform .2s}.btn-ok:hover{background:#315f4c;transform:translateY(-2px);box-shadow:0 16px 30px rgba(36,75,61,.24)}.btn-ok:hover:after{transform:translate(2px,-2px)}.btn-ok:active{transform:scale(.98)}.btn-ok:focus-visible{outline:3px solid #a5bc82;outline-offset:4px}#verseScreen{max-width:570px;margin:0 auto;animation:reveal .6s cubic-bezier(.2,.8,.2,1) both}.date-badge{display:inline-flex;align-items:center;gap:9px;padding:9px 15px;margin:0 0 20px;color:var(--green);background:#edf1e6;border:1px solid #dce5d3;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.04em}.date-badge:before{content:"";width:7px;height:7px;border-radius:50%;background:#7f9b63;box-shadow:0 0 0 3px rgba(127,155,99,.14)}.verse-box{position:relative;padding:32px clamp(22px,5vw,46px) 26px;margin-bottom:14px;overflow:hidden;color:#fff;background:linear-gradient(145deg,#2e5a47,#1f4236 72%);border-radius:22px;text-align:left;box-shadow:0 18px 35px rgba(27,63,48,.16)}.verse-box:before{content:"“";position:absolute;top:-27px;right:18px;color:rgba(220,233,189,.13);font:180px/.9 var(--serif)}.verse-text{position:relative;margin-bottom:20px;font:italic 400 clamp(25px,4.5vw,34px)/1.27 var(--serif);color:#fbfaf4}.verse-ref{position:relative;padding-top:14px;border-top:1px solid rgba(255,255,255,.2);color:#dce9bd;font-size:10px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;text-align:left}.task-box{padding:22px 24px;margin-bottom:0;background:#f2f1e9;border:1px solid #e8e6da;border-radius:20px;text-align:left}.task-title{display:flex;align-items:center;gap:9px;margin-bottom:9px;color:#71804d;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}.task-text{color:#48584e;font-size:14px;line-height:1.75}#verseScreen>p{margin-top:22px!important;color:#899188!important;font-size:11px!important;line-height:1.6}.hidden{display:none!important}@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-4px) rotate(-3deg)}}@keyframes reveal{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@media(max-width:600px){body{padding:18px 14px}.card{border-radius:24px;padding:24px 22px 30px}.icon{width:54px;height:54px;border-radius:19px;font-size:26px;margin-bottom:17px}.subtitle{margin-bottom:27px}#startScreen{padding-top:24px}.btn-ok{width:100%;padding:0 18px}.verse-box{border-radius:18px}.task-box{padding:19px 18px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
   </style>
 </head>
 <body>
-
-  <div class="wrapper">
-    <div class="card">
-      <div class="icon">🕊️</div>
-      <h1>Tageskalender</h1>
-      <div class="subtitle">Bibelvers & Tagesaufgabe</div>
-
-      <!-- STARTSCHIRM -->
-      <div id="startScreen">
-        <p style="font-size: 14px; color: #4a5568; line-height: 1.5; margin-bottom: 22px;">
-          Ein Gedanke für den Tag. Ein kleiner Schritt, der dein Herz weit macht.
-        </p>
-        <button class="btn-ok" onclick="openTodayVerse()">Heutigen Impuls entdecken</button>
-      </div>
-
-      <!-- INHALTS-ANZEIGE -->
-      <div id="verseScreen" class="hidden">
-        <div class="date-badge" id="currentDateDisplay">--.--.----</div>
-        
-        <div class="verse-box">
-          <div class="verse-text" id="verseText"></div>
-          <div class="verse-ref" id="verseRef"></div>
-        </div>
-
-        <div class="task-box">
-          <div class="task-title">🌱 Deine Tagesaufgabe</div>
-          <div class="task-text" id="taskText"></div>
-        </div>
-
-        <p style="font-size: 12px; color: #a0aec0; margin-top: 15px;">
-          Nimm den Gedanken mit in deinen Tag.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const verseList = [
-      { text: "Gott hat seinen Engeln befohlen, dass sie dich behüten auf allen deinen Wegen.", ref: "Psalm 91,11" },
-      { text: "Der Herr ist mein Hirte, mir wird nichts mangeln.", ref: "Psalm 23,1" },
-      { text: "Ich bin das Licht der Welt. Wer mir nachfolgt, wird nicht wandeln in der Finsternis.", ref: "Johannes 8,12" },
-      { text: "Gott ist die Liebe; und wer in der Liebe bleibt, der bleibt in Gott und Gott in ihm.", ref: "1. Johannes 4,16" },
-      { text: "Niemals werde ich dir meine Hilfe entziehen, nie dich im Stich lassen.", ref: "Josua 1,5" },
-      { text: "Siehe, ich bin bei euch alle Tage bis an der Welt Ende.", ref: "Matthäus 28,20" },
-      { text: "Der Herr segne dich und behüte dich.", ref: "4. Mose 6,24" },
-      { text: "Alle eure Dinge lasst in der Liebe geschehen!", ref: "1. Korinther 16,14" },
-      { text: "Gott hat uns nicht gegeben den Geist der Furcht, sondern der Kraft und der Liebe.", ref: "2. Timotheus 1,7" },
-      { text: "Du machst mir kund den Weg zum Leben: Vor dir ist Freude die Fülle.", ref: "Psalm 16,11" },
-      { text: "Ich danke dir dafür, dass ich erstaunlich wunderbar gemacht bin.", ref: "Psalm 139,14" },
-      { text: "Der Herr ist mein Licht und mein Heil; vor wem sollte ich mich fürchten?", ref: "Psalm 27,1" },
-      { text: "Von allen Seiten umgibst du mich und hältst deine Hand über mir.", ref: "Psalm 139,5" },
-      { text: "Die auf den Herrn harren, kriegen neue Kraft, dass sie auffahren mit Flügeln wie Adler.", ref: "Jesaja 40,31" },
-      { text: "Fürchte dich nicht, denn ich bin mit dir; weiche nicht, denn ich bin dein Gott.", ref: "Jesaja 41,10" },
-      { text: "Der Herr ist meine Stärke und mein Schild; auf ihn hofft mein Herz.", ref: "Psalm 28,7" },
-      { text: "Vertraue auf den Herrn von ganzem Herzen.", ref: "Sprüche 3,5" },
-      { text: "Der Herr behüte deinen Ausgang und Eingang von nun an bis in Ewigkeit.", ref: "Psalm 121,8" },
-      { text: "Seid aber untereinander freundlich und herzlich und vergebt einer dem anderen.", ref: "Epheser 4,32" },
-      { text: "Dein Wort ist meines Fußes Leuchte und ein Licht auf meinem Wege.", ref: "Psalm 119,105" }
-    ];
-
-    // 365 abwechslungsreiche Tagesaufgaben für jeden Tag im Jahr
-    const tasks365 = [
-      "Schicke heute einer Person, die du schätzt, eine liebevolle Nachricht.",
-      "Nimm dir heute 5 Minuten Zeit für Stille und ein kurzes Gebet der Dankbarkeit.",
-      "Schenke heute mindestens einer Person ein ganz bewusstes, ehrliches Lächeln.",
-      "Mache heute jemandem in deinem Umfeld ein unaufgefordertes, schönes Kompliment.",
-      "Halt heute Ausschau nach einer Gelegenheit, jemandem eine kleine Freude zu machen.",
-      "Trinke heute ein Glas Wasser in Ruhe und danke bewusst für das Leben.",
-      "Lass heute eine kleine Unfreundlichkeit anderer einfach an dir abperlen.",
-      "Zähle heute vor dem Einschlafen 3 Dinge auf, für die du heute dankbar bist.",
-      "Nimm dir heute Zeit, um jemandem aufmerksam zuzuhören, ohne zu unterbrechen.",
-      "Tue heute etwas Gutes für deinen Körper – du bist wunderbar gemacht.",
-      "Vergib heute im Stillen jemandem, über den du dich geärgert hast.",
-      "Helfe heute spontan jemandem bei einer Kleinigkeit im Alltag.",
-      "Schreibe dir eine Stärke auf, die Gott in dich gelegt hat.",
-      "Gehe heute ein paar Schritte an der frischen Luft und genieße die Natur.",
-      "Bete heute kurz für jemanden, dem es gerade nicht gut geht.",
-      "Lächle heute deinem Spiegelbild zu und sage dir selbst etwas Nettes.",
-      "Verzichte heute für eine Stunde auf dein Smartphone und genieße den Moment.",
-      "Lobe heute jemanden bei der Arbeit oder zu Hause für seinen Einsatz.",
-      "Lies deinen heutigen Bibelvers noch einmal ganz langsam durch.",
-      "Schenke jemandem heute deine volle Aufmerksamkeit im Gespräch.",
-      "Räume heute einen kleinen Ort in deiner Wohnung auf und schaffe Ordnung.",
-      "Sag heute bewusst 'Danke' zu jemandem, der etwas alltägliches für dich tut.",
-      "Segne heute im Stillen eine Person, der du auf der Straße begegnest.",
-      "Gönne dir heute 10 Minuten ohne Hektik und entspanne deine Schultern.",
-      "Schreibe einer Person, mit der du lange keinen Kontakt hattest, einen kurzen Gruß.",
-      "Versuche heute, den ganzen Tag lang nicht zu jammern oder zu klagen.",
-      "Teile heute etwas mit jemandem – z. B. deinen Snack oder deine Zeit.",
-      "Halte heute jemandem die Tür auf und wünsche einen schönen Tag.",
-      "Nimm dir Zeit, um ein Lieblingslied ganz bewusst anzuhören.",
-      "Ermutige heute jemanden, der gerade an sich zweifelt.",
-      "Lass heute den Vortritt, sei es im Verkehr oder an der Kasse.",
-      "Denke heute an ein schönes Erlebnis aus deiner Vergangenheit und lächle.",
-      "Gieße heute eine Pflanze oder kümmere dich liebevoll um ein Tier.",
-      "Gönne dir heute Abend eine ruhige Tasse Tee oder Kaffee.",
-      "Sprich heute ein kurzes Dankgebet für dein Essen vor der Mahlzeit.",
-      "Achte heute auf deine Gedanken und ersetze negative Gedanken durch Hoffnung.",
-      "Überrasche heute jemanden mit einer kleinen Aufmerksamkeit.",
-      "Nimm dir Zeit, um heute tief durchzuatmen und Ruhe in dein Herz zu lassen.",
-      "Vergib dir selbst heute einen kleinen Fehler, den du gemacht hast.",
-      "Schreibe 3 Dinge auf ein Blatt Papier, die du an deinem Leben liebst.",
-      "Bete heute für den Frieden in der Welt.",
-      "Sage heute deiner Familie oder deinen Freunden, wie wichtig sie dir sind.",
-      "Lies eine Passage in der Bibel oder ein inspirierendes Buch.",
-      "Mache heute einen Spaziergang und achte auf die Schönheit um dich herum.",
-      "Verbreite heute gute Laune, wo immer du bist.",
-      "Hilf heute im Haushalt, ohne dass jemand danach fragen muss.",
-      "Sei heute geduldig mit den Menschen um dich herum.",
-      "Achte heute darauf, positiv über andere zu sprechen.",
-      "Danke Gott heute für seine Zusage, immer bei dir zu sein.",
-      "Schenke heute einem Fremden ein freundliches Nicken."
-    ];
-
-    function openTodayVerse() {
-      const today = new Date();
-
-      // Datum formatieren
-      const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-      document.getElementById('currentDateDisplay').innerText = today.toLocaleDateString('de-DE', options);
-
-      // Tag des Jahres berechnen (1 bis 365)
-      const startOfYear = new Date(today.getFullYear(), 0, 0);
-      const diff = today - startOfYear;
-      const oneDay = 1000 * 60 * 60 * 24;
-      const dayOfYear = Math.floor(diff / oneDay);
-
-      // Auswählen von Vers und Aufgabe für den jeweiligen Tag des Jahres
-      const verseIndex = dayOfYear % verseList.length;
-      const taskIndex = dayOfYear % tasks365.length;
-
-      const verse = verseList[verseIndex];
-      const task = tasks365[taskIndex];
-
-      document.getElementById('verseText').innerText = "„" + verse.text + "“";
-      document.getElementById('verseRef').innerText = verse.ref;
-      document.getElementById('taskText').innerText = task;
-
-      // Schirme umschalten
-      document.getElementById('startScreen').classList.add('hidden');
-      document.getElementById('verseScreen').classList.remove('hidden');
-
-      // Konfetti-Effekt
-      if (typeof confetti === 'function') {
-        confetti({
-          particleCount: 30,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#8ec5fc', '#e0c3fc', '#ffffff']
-        });
-      }
-    }
-  </script>
+  <div class="wrapper"><main class="card">
+    <div class="topbar"><div class="language-switch" role="group" aria-label="Sprache / Limbă">
+      <button type="button" id="langDe" aria-pressed="true" onclick="setLanguage('de')">Deutsch</button>
+      <button type="button" id="langRo" aria-pressed="false" onclick="setLanguage('ro')">Română</button>
+    </div></div>
+    <div class="icon" aria-hidden="true">🕊️</div>
+    <h1 id="pageTitle">Tageskalender</h1>
+    <div class="subtitle" id="pageSubtitle">Bibelvers &amp; Tagesaufgabe</div>
+    <section id="startScreen"><p id="introText">Ein Gedanke für den Tag. Ein kleiner Schritt, der dein Herz weit macht.</p><button class="btn-ok" id="startButton" onclick="openTodayVerse()">Heutigen Impuls entdecken</button></section>
+    <section id="verseScreen" class="hidden" aria-live="polite">
+      <div class="date-badge" id="currentDateDisplay">--.--.----</div>
+      <div class="verse-box"><div class="verse-text" id="verseText"></div><div class="verse-ref" id="verseRef"></div></div>
+      <div class="task-box"><div class="task-title" id="taskTitle">🌱 Deine Tagesaufgabe</div><div class="task-text" id="taskText"></div></div>
+      <p id="closingText">Nimm den Gedanken mit in deinen Tag.</p>
+    </section>
+  </main></div>
+<script>
+const verseList=[
+ {de:"Gott hat seinen Engeln befohlen, dass sie dich behüten auf allen deinen Wegen.",ro:"Căci El va porunci îngerilor Săi să te păzească în toate căile tale.",ref:"Psalm 91,11",roRef:"Psalmul 91:11"},
+ {de:"Der Herr ist mein Hirte, mir wird nichts mangeln.",ro:"Domnul este Păstorul meu: nu voi duce lipsă de nimic.",ref:"Psalm 23,1",roRef:"Psalmul 23:1"},
+ {de:"Ich bin das Licht der Welt. Wer mir nachfolgt, wird nicht wandeln in der Finsternis.",ro:"Eu sunt Lumina lumii; cine Mă urmează nu va umbla în întuneric.",ref:"Johannes 8,12",roRef:"Ioan 8:12"},
+ {de:"Gott ist die Liebe; und wer in der Liebe bleibt, der bleibt in Gott und Gott in ihm.",ro:"Dumnezeu este dragoste; cine rămâne în dragoste rămâne în Dumnezeu, iar Dumnezeu rămâne în el.",ref:"1. Johannes 4,16",roRef:"1 Ioan 4:16"},
+ {de:"Niemals werde ich dir meine Hilfe entziehen, nie dich im Stich lassen.",ro:"Nicidecum n-am să te las, cu niciun chip nu te voi părăsi.",ref:"Josua 1,5",roRef:"Iosua 1:5"},
+ {de:"Siehe, ich bin bei euch alle Tage bis an der Welt Ende.",ro:"Iată că Eu sunt cu voi în toate zilele, până la sfârșitul veacului.",ref:"Matthäus 28,20",roRef:"Matei 28:20"},
+ {de:"Der Herr segne dich und behüte dich.",ro:"Domnul să te binecuvânteze și să te păzească.",ref:"4. Mose 6,24",roRef:"Numeri 6:24"},
+ {de:"Alle eure Dinge lasst in der Liebe geschehen!",ro:"Tot ce faceți să fie făcut cu dragoste!",ref:"1. Korinther 16,14",roRef:"1 Corinteni 16:14"},
+ {de:"Gott hat uns nicht gegeben den Geist der Furcht, sondern der Kraft und der Liebe.",ro:"Dumnezeu nu ne-a dat un duh de frică, ci de putere, de dragoste și de chibzuință.",ref:"2. Timotheus 1,7",roRef:"2 Timotei 1:7"},
+ {de:"Du machst mir kund den Weg zum Leben: Vor dir ist Freude die Fülle.",ro:"Tu îmi vei arăta cărarea vieții; înaintea Ta sunt bucurii nespuse.",ref:"Psalm 16,11",roRef:"Psalmul 16:11"},
+ {de:"Ich danke dir dafür, dass ich erstaunlich wunderbar gemacht bin.",ro:"Te laud că sunt o făptură așa de minunată.",ref:"Psalm 139,14",roRef:"Psalmul 139:14"},
+ {de:"Der Herr ist mein Licht und mein Heil; vor wem sollte ich mich fürchten?",ro:"Domnul este lumina și mântuirea mea: de cine să mă tem?",ref:"Psalm 27,1",roRef:"Psalmul 27:1"},
+ {de:"Von allen Seiten umgibst du mich und hältst deine Hand über mir.",ro:"Tu mă înconjori pe dinapoi și pe dinainte și-Ți pui mâna peste mine.",ref:"Psalm 139,5",roRef:"Psalmul 139:5"},
+ {de:"Die auf den Herrn harren, kriegen neue Kraft, dass sie auffahren mit Flügeln wie Adler.",ro:"Cei ce se încred în Domnul își înnoiesc puterea; zboară ca vulturii.",ref:"Jesaja 40,31",roRef:"Isaia 40:31"},
+ {de:"Fürchte dich nicht, denn ich bin mit dir; weiche nicht, denn ich bin dein Gott.",ro:"Nu te teme, căci Eu sunt cu tine; nu te uita cu îngrijorare, căci Eu sunt Dumnezeul tău.",ref:"Jesaja 41,10",roRef:"Isaia 41:10"},
+ {de:"Der Herr ist meine Stärke und mein Schild; auf ihn hofft mein Herz.",ro:"Domnul este tăria mea și scutul meu; inima mea se încrede în El.",ref:"Psalm 28,7",roRef:"Psalmul 28:7"},
+ {de:"Vertraue auf den Herrn von ganzem Herzen.",ro:"Încrede-te în Domnul din toată inima ta.",ref:"Sprüche 3,5",roRef:"Proverbele 3:5"},
+ {de:"Der Herr behüte deinen Ausgang und Eingang von nun an bis in Ewigkeit.",ro:"Domnul te va păzi la plecare și la venire, de acum și până în veac.",ref:"Psalm 121,8",roRef:"Psalmul 121:8"},
+ {de:"Seid aber untereinander freundlich und herzlich und vergebt einer dem anderen.",ro:"Fiți buni și miloși unii cu alții și iertați-vă unul pe altul.",ref:"Epheser 4,32",roRef:"Efeseni 4:32"},
+ {de:"Dein Wort ist meines Fußes Leuchte und ein Licht auf meinem Wege.",ro:"Cuvântul Tău este o candelă pentru picioarele mele și o lumină pe cărarea mea.",ref:"Psalm 119,105",roRef:"Psalmul 119:105"}
+];
+const tasks365=[
+ {de:"Schicke heute einer Person, die du schätzt, eine liebevolle Nachricht.",ro:"Trimite astăzi un mesaj plin de căldură unei persoane pe care o apreciezi."},
+ {de:"Nimm dir heute 5 Minuten Zeit für Stille und ein kurzes Gebet der Dankbarkeit.",ro:"Fă-ți astăzi 5 minute de liniște pentru o scurtă rugăciune de mulțumire."},
+ {de:"Schenke heute mindestens einer Person ein ganz bewusstes, ehrliches Lächeln.",ro:"Oferă astăzi cel puțin unei persoane un zâmbet sincer și plin de căldură."},
+ {de:"Mache heute jemandem in deinem Umfeld ein unaufgefordertes, schönes Kompliment.",ro:"Fă astăzi un compliment frumos cuiva din jurul tău, fără să aștepți un motiv."},
+ {de:"Halt heute Ausschau nach einer Gelegenheit, jemandem eine kleine Freude zu machen.",ro:"Fii atent astăzi la ocazia de a aduce cuiva o mică bucurie."},
+ {de:"Trinke heute ein Glas Wasser in Ruhe und danke bewusst für das Leben.",ro:"Bea astăzi un pahar cu apă în tihnă și mulțumește pentru darul vieții."},
+ {de:"Lass heute eine kleine Unfreundlichkeit anderer einfach an dir abperlen.",ro:"Lasă astăzi o mică răutate a cuiva să treacă pe lângă tine fără să te tulbure."},
+ {de:"Zähle heute vor dem Einschlafen 3 Dinge auf, für die du heute dankbar bist.",ro:"Înainte să adormi, numește trei lucruri pentru care ești recunoscător astăzi."},
+ {de:"Nimm dir heute Zeit, um jemandem aufmerksam zuzuhören, ohne zu unterbrechen.",ro:"Fă-ți astăzi timp să asculți pe cineva cu atenție, fără să-l întrerupi."},
+ {de:"Tue heute etwas Gutes für deinen Körper – du bist wunderbar gemacht.",ro:"Fă astăzi ceva bun pentru trupul tău — ești creat într-un chip minunat."},
+ {de:"Vergib heute im Stillen jemandem, über den du dich geärgert hast.",ro:"Iartă astăzi în inima ta pe cineva care te-a supărat."},
+ {de:"Helfe heute spontan jemandem bei einer Kleinigkeit im Alltag.",ro:"Ajută astăzi pe cineva, din proprie inițiativă, cu un lucru mărunt."},
+ {de:"Schreibe dir eine Stärke auf, die Gott in dich gelegt hat.",ro:"Notează o calitate pe care Dumnezeu a pus-o în tine."},
+ {de:"Gehe heute ein paar Schritte an der frischen Luft und genieße die Natur.",ro:"Fă astăzi câțiva pași în aer liber și bucură-te de natură."},
+ {de:"Bete heute kurz für jemanden, dem es gerade nicht gut geht.",ro:"Roagă-te astăzi pe scurt pentru cineva care trece printr-o perioadă grea."},
+ {de:"Lächle heute deinem Spiegelbild zu und sage dir selbst etwas Nettes.",ro:"Zâmbește-i astăzi chipului tău din oglindă și spune-ți ceva frumos."},
+ {de:"Verzichte heute für eine Stunde auf dein Smartphone und genieße den Moment.",ro:"Lasă astăzi telefonul deoparte pentru o oră și bucură-te de clipa prezentă."},
+ {de:"Lobe heute jemanden bei der Arbeit oder zu Hause für seinen Einsatz.",ro:"Laudă astăzi pe cineva de la serviciu sau de acasă pentru efortul depus."},
+ {de:"Lies deinen heutigen Bibelvers noch einmal ganz langsam durch.",ro:"Citește încă o dată, pe îndelete, versetul biblic de astăzi."},
+ {de:"Schenke jemandem heute deine volle Aufmerksamkeit im Gespräch.",ro:"Oferă-i astăzi cuiva toată atenția ta în timpul unei conversații."},
+ {de:"Räume heute einen kleinen Ort in deiner Wohnung auf und schaffe Ordnung.",ro:"Fă ordine astăzi într-un colțișor din locuința ta."},
+ {de:"Sag heute bewusst 'Danke' zu jemandem, der etwas alltägliches für dich tut.",ro:"Mulțumește-i astăzi cuiva care face pentru tine un lucru obișnuit."},
+ {de:"Segne heute im Stillen eine Person, der du auf der Straße begegnest.",ro:"Binecuvântează în gând o persoană pe care o întâlnești astăzi pe drum."},
+ {de:"Gönne dir heute 10 Minuten ohne Hektik und entspanne deine Schultern.",ro:"Dăruiește-ți astăzi 10 minute fără grabă și relaxează-ți umerii."},
+ {de:"Schreibe einer Person, mit der du lange keinen Kontakt hattest, einen kurzen Gruß.",ro:"Trimite un scurt mesaj unei persoane cu care nu ai mai vorbit de mult."},
+ {de:"Versuche heute, den ganzen Tag lang nicht zu jammern oder zu klagen.",ro:"Încearcă astăzi să treci întreaga zi fără să te plângi."},
+ {de:"Teile heute etwas mit jemandem – z. B. deinen Snack oder deine Zeit.",ro:"Împarte astăzi ceva cu cineva — de pildă gustarea sau timpul tău."},
+ {de:"Halte heute jemandem die Tür auf und wünsche einen schönen Tag.",ro:"Ține astăzi ușa pentru cineva și urează-i o zi frumoasă."},
+ {de:"Nimm dir Zeit, um ein Lieblingslied ganz bewusst anzuhören.",ro:"Fă-ți timp să asculți cu atenție unul dintre cântecele tale preferate."},
+ {de:"Ermutige heute jemanden, der gerade an sich zweifelt.",ro:"Încurajează astăzi pe cineva care se îndoiește de sine."},
+ {de:"Lass heute den Vortritt, sei es im Verkehr oder an der Kasse.",ro:"Lasă astăzi pe cineva să treacă înaintea ta, în trafic sau la coadă."},
+ {de:"Denke heute an ein schönes Erlebnis aus deiner Vergangenheit und lächle.",ro:"Amintește-ți astăzi o întâmplare frumoasă din trecut și zâmbește."},
+ {de:"Gieße heute eine Pflanze oder kümmere dich liebevoll um ein Tier.",ro:"Udă astăzi o plantă sau îngrijește cu drag un animal."},
+ {de:"Gönne dir heute Abend eine ruhige Tasse Tee oder Kaffee.",ro:"Bucură-te în tihnă, în seara aceasta, de o cană de ceai sau de cafea."},
+ {de:"Sprich heute ein kurzes Dankgebet für dein Essen vor der Mahlzeit.",ro:"Înainte de masă, rostește astăzi o scurtă rugăciune de mulțumire pentru hrană."},
+ {de:"Achte heute auf deine Gedanken und ersetze negative Gedanken durch Hoffnung.",ro:"Fii atent astăzi la gândurile tale și înlocuiește-le pe cele apăsătoare cu speranță."},
+ {de:"Überrasche heute jemanden mit einer kleinen Aufmerksamkeit.",ro:"Surprinde astăzi pe cineva cu un mic gest de atenție."},
+ {de:"Nimm dir Zeit, um heute tief durchzuatmen und Ruhe in dein Herz zu lassen.",ro:"Fă-ți timp astăzi să respiri adânc și să lași liniștea să-ți cuprindă inima."},
+ {de:"Vergib dir selbst heute einen kleinen Fehler, den du gemacht hast.",ro:"Iartă-ți astăzi o greșeală măruntă pe care ai făcut-o."},
+ {de:"Schreibe 3 Dinge auf ein Blatt Papier, die du an deinem Leben liebst.",ro:"Scrie pe o foaie trei lucruri pe care le iubești la viața ta."},
+ {de:"Bete heute für den Frieden in der Welt.",ro:"Roagă-te astăzi pentru pacea în lume."},
+ {de:"Sage heute deiner Familie oder deinen Freunden, wie wichtig sie dir sind.",ro:"Spune-le astăzi familiei sau prietenilor cât de mult înseamnă pentru tine."},
+ {de:"Lies eine Passage in der Bibel oder ein inspirierendes Buch.",ro:"Citește un pasaj din Biblie sau dintr-o carte care te inspiră."},
+ {de:"Mache heute einen Spaziergang und achte auf die Schönheit um dich herum.",ro:"Fă astăzi o plimbare și observă frumusețea din jurul tău."},
+ {de:"Verbreite heute gute Laune, wo immer du bist.",ro:"Răspândește astăzi voie bună oriunde te-ai afla."},
+ {de:"Hilf heute im Haushalt, ohne dass jemand danach fragen muss.",ro:"Ajută astăzi la treburile casei fără să aștepți să ți se ceară."},
+ {de:"Sei heute geduldig mit den Menschen um dich herum.",ro:"Ai astăzi răbdare cu oamenii din jurul tău."},
+ {de:"Achte heute darauf, positiv über andere zu sprechen.",ro:"Ai grijă astăzi să vorbești frumos despre ceilalți."},
+ {de:"Danke Gott heute für seine Zusage, immer bei dir zu sein.",ro:"Mulțumește-I astăzi lui Dumnezeu pentru promisiunea că este mereu cu tine."},
+ {de:"Schenke heute einem Fremden ein freundliches Nicken.",ro:"Salută astăzi cu un gest prietenos o persoană necunoscută."}
+];
+const translations={
+ de:{title:"Tageskalender",subtitle:"Bibelvers & Tagesaufgabe",intro:"Ein Vers, ein guter Vibe und ein kleiner Step für deinen Tag.",start:"Deinen Faith-Moment entdecken",task:"🌱 Deine Tagesaufgabe",closing:"Nimm den Gedanken mit in deinen Tag.",locale:"de-DE",quoteOpen:"„",quoteClose:"“"},
+ ro:{title:"Momentul tău zilnic de credință",subtitle:"Verset biblic și provocarea zilei",intro:"Un verset, o stare bună și un pas mic pentru ziua ta.",start:"Descoperă momentul tău de credință",task:"🌱 Provocarea zilei",closing:"Poartă acest gând cu tine pe parcursul zilei.",locale:"ro-RO",quoteOpen:"„",quoteClose:"”"}
+};
+let currentLanguage=localStorage.getItem('tageskalender-language')==='ro'?'ro':'de';let todayIndex=null;
+function setLanguage(language){currentLanguage=language;localStorage.setItem('tageskalender-language',language);document.documentElement.lang=language;document.getElementById('langDe').setAttribute('aria-pressed',String(language==='de'));document.getElementById('langRo').setAttribute('aria-pressed',String(language==='ro'));const t=translations[language];document.title=language==='de'?'Dein täglicher Faith-Moment':'Momentul tău zilnic de credință';document.getElementById('pageTitle').textContent=t.title;document.getElementById('pageSubtitle').textContent=t.subtitle;document.getElementById('introText').textContent=t.intro;document.getElementById('startButton').textContent=t.start;document.getElementById('taskTitle').textContent=t.task;document.getElementById('closingText').textContent=t.closing;if(todayIndex!==null)renderTodayContent()}
+function renderTodayContent(){const today=new Date();const t=translations[currentLanguage];document.getElementById('currentDateDisplay').textContent=new Intl.DateTimeFormat(t.locale,{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(today);const verse=verseList[todayIndex.verseIndex],task=tasks365[todayIndex.taskIndex];document.getElementById('verseText').textContent=t.quoteOpen+verse[currentLanguage]+t.quoteClose;document.getElementById('verseRef').textContent=verse[currentLanguage==='de'?'ref':'roRef'];document.getElementById('taskText').textContent=task[currentLanguage]}
+function openTodayVerse(){const today=new Date();const startOfYear=new Date(today.getFullYear(),0,0);const dayOfYear=Math.floor((today-startOfYear)/86400000);todayIndex={verseIndex:dayOfYear%verseList.length,taskIndex:dayOfYear%tasks365.length};renderTodayContent();document.getElementById('startScreen').classList.add('hidden');document.getElementById('verseScreen').classList.remove('hidden');if(typeof confetti==='function')confetti({particleCount:30,spread:70,origin:{y:.6},colors:['#8ec5fc','#e0c3fc','#ffffff']})}
+setLanguage(currentLanguage);
+</script>
 </body>
 </html>
