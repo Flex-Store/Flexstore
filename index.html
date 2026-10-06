@@ -1,5 +1,17 @@
 <!DOCTYPE html>
 <html lang="de">
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // Füge hier deine kopierten Werte aus Supabase ein:
+  const SUPABASE_URL = 'https://liwvrjvopxdhcoiyfwkl.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxpd3ZyanZvcHhkaGNvaXlmd2tsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyNDU3MzEsImV4cCI6MjEwNjgyMTczMX0.4kgObJ7D5WmqEyhiNZ7_ME5Jg6e50fosVdT3WBPUMeg';
+
+  // Verbindung herstellen:
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
+  
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
