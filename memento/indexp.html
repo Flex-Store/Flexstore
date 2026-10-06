@@ -1,1 +1,292 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unser Erinnerungs-Schlüssel</title>
+  <!-- Supabase JS Client -->
+  <script src="https://liwvrjvopxdhcoiyfwkl.supabase.co"></script>
+  <style>
+    :root {
+      --primary: #e63946;
+      --bg: #fff5f5;
+      --card-bg: #ffffff;
+      --text: #2b2d42;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .container {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 { margin-bottom: 10px; font-size: 1.6rem; color: var(--primary); }
+    p { color: #666; line-height: 1.5; margin-bottom: 20px; }
+    .hidden { display: none !important; }
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #d62828; }
+    .btn:disabled { background: #ccc; cursor: not-allowed; }
+    input[type="file"] { margin: 15px 0; width: 100%; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .gallery-grid img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .status-icon { font-size: 3rem; margin-bottom: 10px; }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
 
+  <div class="container">
+    
+    <!-- Ladebildschirm -->
+    <div id="state-loading">
+      <div class="spinner"></div>
+      <p>Lade Erinnerungen...</p>
+    </div>
+
+    <!-- Fehler: Kein Chip in URL -->
+    <div id="state-no-chip" class="hidden">
+      <div class="status-icon">🔑</div>
+      <h1>Kein Schlüssel erkannt</h1>
+      <p>Bitte halte deinen Puzzleteil-Anhänger an dein Smartphone, um die Seite zu öffnen.</p>
+    </div>
+
+    <!-- 1. Foto-Upload View (Erster Scan) -->
+    <div id="state-upload" class="hidden">
+      <div class="status-icon">📸</div>
+      <h1>Willkommen!</h1>
+      <p>Lade eure schönsten Fotos hoch, um diesen Schlüssel zu aktivieren.</p>
+      <input type="file" id="photo-input" multiple accept="image/*">
+      <button class="btn" id="upload-btn" onclick="handleUpload()">Bilder speichern</button>
+      <div id="upload-status"></div>
+    </div>
+
+    <!-- 2. Warten auf Chip 2 View -->
+    <div id="state-awaiting-chip2" class="hidden">
+      <div class="status-icon">🧩</div>
+      <h1>Bilder gespeichert!</h1>
+      <p>Um das Album freizuschalten, muss jetzt das <strong>2. Puzzleteil</strong> (deines Partners) einmal gescannt werden.</p>
+      <p style="font-size: 0.9rem; color: #888;">Schließe diese Seite und haltet das zweite Puzzleteil an das Handy.</p>
+    </div>
+
+    <!-- 3. Noch gesperrt View (Wenn Chip 1 erneut gescannt wird, bevor Chip 2 gescannt wurde) -->
+    <div id="state-locked" class="hidden">
+      <div class="status-icon">🔒</div>
+      <h1>Album ist noch gesperrt</h1>
+      <p>Die Fotos sind sicher gespeichert, aber es fehlt noch der Scan des zweiten Puzzleteils!</p>
+    </div>
+
+    <!-- 4. Finale Fotogalerie (Freigeschaltet) -->
+    <div id="state-gallery" class="hidden">
+      <div class="status-icon">❤️</div>
+      <h1>Unsere Erinnerungen</h1>
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // === 1. DEINE SUPABASE ZUGANGSDATEN HIER EINSETZEN ===
+    const SUPABASE_URL = 'https://DEINE-PROJEKT-ID.supabase.co';
+    const SUPABASE_ANON_KEY = 'DEIN_ANON_PUBLIC_KEY';
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Globale Variablen
+    let currentChipId = null;
+    let currentPairId = null;
+    let currentGalleryId = null;
+
+    // Help-Funktion zur UI-Steuerung
+    function showState(stateId) {
+      document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
+      document.getElementById(stateId).classList.remove('hidden');
+    }
+
+    // Hauptlogik beim Laden der Seite
+    async function initApp() {
+      const urlParams = new URLSearchParams(window.location.search);
+      currentChipId = urlParams.get('chip'); // Liest z.B. ?chip=1 aus der URL
+
+      if (!currentChipId) {
+        showState('state-no-chip');
+        return;
+      }
+
+      try {
+        // 1. Chip-Daten & zugehörige Galerie aus Supabase abfragen
+        const { data: chip, error: chipErr } = await supabase
+          .from('chips')
+          .select('*, galleries(*)')
+          .eq('chip_id', currentChipId)
+          .single();
+
+        if (chipErr || !chip) {
+          alert("Fehler: Dieser Schlüssel wurde im System nicht gefunden.");
+          showState('state-no-chip');
+          return;
+        }
+
+        currentPairId = chip.pair_id;
+        const gallery = chip.galleries;
+        currentGalleryId = gallery.id;
+
+        // 2. Status-Prüfung
+        if (gallery.status === 'unlocked') {
+          // BEIDE CHIPS AKTIVIERT -> GALERIE ANZEIGEN
+          await loadAndShowGallery(gallery.id);
+
+        } else if (gallery.status === 'pending') {
+          // ERSTER UPLOAD NOCH NICHT ERFOLGT -> UPLOAD BILD SCHIRM
+          showState('state-upload');
+
+        } else if (gallery.status === 'locked') {
+          // CHIP 1 HAT BILDER HOCHGELADEN, IST JETZT CHIP 2 AN DER REIHE?
+          if (!chip.is_activated) {
+            // Dies ist der ERSTE Scan von Chip 2! -> JETZT FREISCHALTEN!
+            await unlockGallery(currentChipId, gallery.id);
+            await loadAndShowGallery(gallery.id);
+          } else {
+            // Chip 1 wurde erneut gescannt, aber Chip 2 wurde noch NIE gescannt
+            showState('state-locked');
+          }
+        }
+      } catch (err) {
+        console.error("Fehler beim Laden:", err);
+        alert("Ein Fehler ist aufgetreten.");
+      }
+    }
+
+    // Funktion zum Hochladen der Bilder (Erster Scan)
+    async function handleUpload() {
+      const input = document.getElementById('photo-input');
+      const btn = document.getElementById('upload-btn');
+      const statusText = document.getElementById('upload-status');
+
+      if (!input.files || input.files.length === 0) {
+        alert("Bitte wähle mindestens ein Foto aus.");
+        return;
+      }
+
+      btn.disabled = true;
+      statusText.innerText = "Lade Bilder hoch...";
+
+      try {
+        for (let file of input.files) {
+          const fileName = `${currentGalleryId}/${Date.now()}_${file.name}`;
+          
+          // 1. Datei in Bucket hochladen
+          const { error: uploadErr } = await supabase.storage
+            .from('anniversary-photos')
+            .upload(fileName, file);
+
+          if (uploadErr) throw uploadErr;
+
+          // 2. Öffentliche URL generieren
+          const { data: publicUrlData } = supabase.storage
+            .from('anniversary-photos')
+            .getPublicUrl(fileName);
+
+          // 3. Eintrag in Tabelle 'photos'
+          await supabase.from('photos').insert({
+            gallery_id: currentGalleryId,
+            image_url: publicUrlData.publicUrl
+          });
+        }
+
+        // 4. Chip 1 aktivieren & Galerie-Status auf 'locked' setzen
+        await supabase.from('chips').update({ is_activated: true }).eq('chip_id', currentChipId);
+        await supabase.from('galleries').update({ status: 'locked' }).eq('id', currentGalleryId);
+
+        showState('state-awaiting-chip2');
+
+      } catch (err) {
+        console.error("Upload-Fehler:", err);
+        alert("Fehler beim Hochladen der Bilder: " + err.message);
+        btn.disabled = false;
+        statusText.innerText = "";
+      }
+    }
+
+    // Funktion zur Freischaltung durch Chip 2
+    async function unlockGallery(chipId, galleryId) {
+      // Markiere Chip 2 als aktiviert
+      await supabase.from('chips').update({ is_activated: true }).eq('chip_id', chipId);
+      // Schalte die Galerie für beide frei
+      await supabase.from('galleries').update({ status: 'unlocked' }).eq('id', galleryId);
+    }
+
+    // Fotos laden und als Raster anzeigen
+    async function loadAndShowGallery(galleryId) {
+      showState('state-loading');
+      
+      const { data: photos, error } = await supabase
+        .from('photos')
+        .select('*')
+        .eq('gallery_id', galleryId)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        alert("Fehler beim Laden der Galerie.");
+        return;
+      }
+
+      const grid = document.getElementById('gallery-grid');
+      grid.innerHTML = '';
+      photos.forEach(p => {
+        const img = document.createElement('img');
+        img.src = p.image_url;
+        grid.appendChild(img);
+      });
+
+      showState('state-gallery');
+    }
+
+    // App beim Start ausführen
+    initApp();
+  </script>
+</body>
+</html>
