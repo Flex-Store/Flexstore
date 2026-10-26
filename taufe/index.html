@@ -70,10 +70,35 @@
       z-index: 1;
     }
 
+    /* Gezeichnetes Kreuz: auch auf Handys goldfarben */
     .cross {
-      font: 44px Georgia, serif;
-      color: var(--gold);
-      margin-bottom: 24px;
+      position: relative;
+      width: 30px;
+      height: 44px;
+      margin: 0 auto 24px;
+    }
+
+    .cross::before,
+    .cross::after {
+      content: "";
+      position: absolute;
+      display: block;
+      background: var(--gold);
+      border-radius: 1px;
+    }
+
+    .cross::before {
+      width: 3px;
+      height: 44px;
+      top: 0;
+      left: 13.5px;
+    }
+
+    .cross::after {
+      width: 30px;
+      height: 3px;
+      top: 13px;
+      left: 0;
     }
 
     .eyebrow {
@@ -226,7 +251,6 @@
     }
 
     /* Animationen */
-
     @keyframes arrive {
       from {
         opacity: 0;
@@ -341,7 +365,8 @@
   <main>
     <!-- Gratulation ganz oben -->
     <section class="hero">
-      <div class="cross" aria-hidden="true">✝</div>
+      <div class="cross" aria-hidden="true"></div>
+
       <div class="eyebrow">
         Ein besonderer Tag. Ein gesegneter Weg.
       </div>
@@ -401,9 +426,9 @@
 
       <div>
         <p>
-          Liebe Julia, zu deiner Taufe gratulieren wir dir von ganzem
-          Herzen! Heute feiern wir dich und einen besonderen Schritt
-          auf deinem Lebensweg.
+          Liebe Julia, zu deiner Taufe gratulieren wir dir von
+          ganzem Herzen! Heute feiern wir dich und einen besonderen
+          Schritt auf deinem Lebensweg.
         </p>
 
         <p>
@@ -427,7 +452,7 @@
     </section>
 
     <section class="closing">
-      <div class="cross" aria-hidden="true">✝</div>
+      <div class="cross" aria-hidden="true"></div>
       <h2>Ein Leben voller Segen.</h2>
       <p>
         Für dich, liebe Julia.<br>
