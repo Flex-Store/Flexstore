@@ -1,1 +1,630 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+        content="Alles Liebe zu deiner Taufe, Carina. Glückwünsche und Bibelverse für deinen Weg.">
 
+  <title>Carina · Alles Liebe zur Taufe</title>
+
+  <style>
+    :root {
+      --paper: #f7f4ed;
+      --ink: #30473e;
+      --muted: #6c776d;
+      --gold: #a38048;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: system-ui, sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      max-width: 1100px;
+      margin: auto;
+      padding: 25px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid #dce0d2;
+    }
+
+    .brand {
+      display: block;
+      width: 168px;
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    nav {
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      text-align: center;
+      padding: 75px 24px 85px;
+      background:
+        radial-gradient(ellipse at 0 40%, #dce5d780, transparent 40%),
+        radial-gradient(ellipse at 100% 50%, #dce5d780, transparent 40%);
+    }
+
+    .hero > :not(.lights) {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Goldfarbenes Kreuz für Computer und Handy */
+    .cross {
+      position: relative;
+      width: 30px;
+      height: 44px;
+      margin: 0 auto 24px;
+    }
+
+    .cross::before,
+    .cross::after {
+      content: "";
+      position: absolute;
+      display: block;
+      background: var(--gold);
+      border-radius: 1px;
+    }
+
+    .cross::before {
+      width: 3px;
+      height: 44px;
+      top: 0;
+      left: 13.5px;
+    }
+
+    .cross::after {
+      width: 30px;
+      height: 3px;
+      top: 13px;
+      left: 0;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--gold);
+    }
+
+    h1 {
+      font: normal clamp(64px, 15vw, 160px)/1.1 Georgia, serif;
+      letter-spacing: -4px;
+      margin: 25px 0;
+    }
+
+    h2 {
+      font: normal clamp(32px, 5vw, 46px)/1.2 Georgia, serif;
+      margin: 15px 0 25px;
+    }
+
+    .intro {
+      font: 22px/1.7 Georgia, serif;
+      color: var(--muted);
+    }
+
+    .pill {
+      display: inline-block;
+      border: 1px solid #aaba9d;
+      border-radius: 30px;
+      padding: 14px 24px;
+      font-size: 13px;
+      margin-top: 20px;
+    }
+
+    .verses {
+      background: #e5ebdf;
+      text-align: center;
+      padding: 65px 22px;
+    }
+
+    .card {
+      max-width: 740px;
+      margin: 32px auto 0;
+      background: #fcfaf5;
+      border: 1px solid #d3dccb;
+      border-radius: 120px 120px 14px 14px;
+      padding: 42px 40px 32px;
+    }
+
+    .quote {
+      font: 60px/1 Georgia, serif;
+      color: var(--gold);
+      height: 45px;
+    }
+
+    blockquote {
+      font: clamp(23px, 3vw, 30px)/1.5 Georgia, serif;
+      min-height: 140px;
+      margin: 10px 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    cite {
+      font-style: normal;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    button {
+      display: block;
+      margin: 30px auto 0;
+      padding: 16px 27px;
+      background: var(--ink);
+      color: white;
+      border: 0;
+      border-radius: 30px;
+      cursor: pointer;
+      font: 14px system-ui, sans-serif;
+    }
+
+    button:hover {
+      background: #496353;
+    }
+
+    .pill,
+    button {
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .pill:hover,
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px #30473e18;
+    }
+
+    a:focus-visible,
+    button:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 5px;
+    }
+
+    .note {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-top: 22px;
+    }
+
+    .wish {
+      max-width: 1000px;
+      margin: auto;
+      padding: 65px 30px;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 55px;
+      border-top: 1px solid #dce0d2;
+    }
+
+    .wish p {
+      font-size: 16px;
+      line-height: 1.9;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    .signature {
+      font: italic 22px Georgia, serif !important;
+      color: var(--gold) !important;
+    }
+
+    .closing {
+      text-align: center;
+      padding: 65px 24px;
+    }
+
+    .closing p {
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    footer {
+      padding: 25px;
+      border-top: 1px solid #dce0d2;
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+
+    @keyframes arrive {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floatLight {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(.7);
+      }
+      25%, 70% {
+        opacity: .65;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-190px) scale(1.15);
+      }
+    }
+
+    .hero h1 {
+      animation: arrive 1.2s ease-out both;
+    }
+
+    .hero .intro {
+      animation: arrive 1.2s .2s ease-out both;
+    }
+
+    .hero .pill {
+      animation: arrive 1.2s .4s ease-out both;
+    }
+
+    .lights {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .lights span {
+      position: absolute;
+      bottom: 8%;
+      left: var(--x);
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      background: #c6a76c;
+      box-shadow: 0 0 18px 5px #d9c18d55;
+      opacity: 0;
+      animation: floatLight 5s var(--delay) ease-in-out both;
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 18px 6%;
+      }
+
+      .brand {
+        width: 126px;
+      }
+
+      nav {
+        font-size: 10px;
+      }
+
+      .hero {
+        padding: 55px 22px;
+      }
+
+      h1 {
+        letter-spacing: -3px;
+      }
+
+      .wish {
+        grid-template-columns: 1fr;
+        gap: 5px;
+        padding: 45px 25px;
+      }
+
+      .card {
+        padding: 35px 22px;
+        border-radius: 85px 85px 14px 14px;
+      }
+
+      blockquote {
+        min-height: 190px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .lights {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <a class="brand" href="#" aria-label="Flexstore – zum Anfang">
+      <img
+        class="brand-logo"
+        src="flexstore-transparent.png"
+        alt="Flexstore"
+      >
+    </a>
+
+    <nav aria-label="Hauptnavigation">
+      <a href="#bibelverse">EIN VERS FÜR DICH ↗</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Gratulation ganz oben -->
+    <section class="hero">
+      <div class="cross" aria-hidden="true"></div>
+
+      <div class="eyebrow">
+        Ein besonderer Tag. Ein gesegneter Weg.
+      </div>
+
+      <h1>Carina</h1>
+
+      <p class="intro">
+        Alles Liebe zu deiner Taufe.<br>
+        Möge Gottes Liebe dich ein Leben lang begleiten.
+      </p>
+
+      <a class="pill" href="#wuensche">
+        Von Herzen für dich ↓
+      </a>
+    </section>
+
+    <!-- Bibelvers-Generator -->
+    <section class="verses" id="bibelverse">
+      <div class="eyebrow">Worte, die dich begleiten</div>
+
+      <h2>
+        Ein kleiner Vers.<br>
+        Ganz viel Zuversicht.
+      </h2>
+
+      <p>Entdecke einen Bibelvers für deinen Weg.</p>
+
+      <div class="card">
+        <div class="quote" aria-hidden="true">“</div>
+
+        <div aria-live="polite" aria-atomic="true">
+          <blockquote id="text">
+            Der HERR segne dich und behüte dich.
+          </blockquote>
+          <cite id="reference">4. Mose 6,24</cite>
+        </div>
+
+        <button id="generate" type="button">
+          Neuen Bibelvers entdecken ↗
+        </button>
+
+        <p class="note">
+          Zufällig ausgewählte Bibelverse · Lutherbibel 1912
+        </p>
+      </div>
+    </section>
+
+    <!-- Persönliche Glückwünsche -->
+    <section class="wish" id="wuensche">
+      <div>
+        <div class="eyebrow">Unsere Wünsche</div>
+
+        <h2>
+          Du bist geliebt.<br>
+          Heute und immer.
+        </h2>
+      </div>
+
+      <div>
+        <p>
+          Liebe Carina, zu deiner Taufe gratulieren wir dir von
+          ganzem Herzen! Heute feiern wir dich und einen besonderen
+          Schritt auf deinem Lebensweg.
+        </p>
+
+        <p>
+          Wir wünschen dir Menschen, die dich mit Liebe begleiten,
+          Mut für neue Schritte und Vertrauen, wenn der Weg einmal
+          ungewiss ist. Möge Gott seine schützende Hand über dich
+          halten und dein Leben mit Freude, Hoffnung und Frieden
+          erfüllen.
+        </p>
+
+        <p>
+          Auch deiner Familie und allen, die diesen besonderen Tag
+          mit dir feiern, wünschen wir eine wunderschöne Taufe und
+          viele gemeinsame Glücksmomente.
+        </p>
+
+        <p class="signature">
+          Alles Liebe und Gottes Segen ♡
+        </p>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="cross" aria-hidden="true"></div>
+
+      <h2>Ein Leben voller Segen.</h2>
+
+      <p>
+        Für dich, liebe Carina.<br>
+        Für all die kleinen und großen Wunder, die vor dir liegen.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    MIT LIEBE ZU DEINER TAUFE · CARINA
+  </footer>
+
+  <script>
+    const verses = [
+      [
+        'Der HERR segne dich und behüte dich.',
+        '4. Mose 6,24'
+      ],
+      [
+        'Denn er hat seinen Engeln befohlen über dir, daß sie dich behüten auf allen deinen Wegen.',
+        'Psalm 91,11'
+      ],
+      [
+        'Der HERR ist mein Hirte; mir wird nichts mangeln.',
+        'Psalm 23,1'
+      ],
+      [
+        'Alle eure Dinge lasset in der Liebe geschehen!',
+        '1. Korinther 16,14'
+      ],
+      [
+        'Gott ist die Liebe; und wer in der Liebe bleibt, der bleibt in Gott und Gott in ihm.',
+        '1. Johannes 4,16 · Auszug'
+      ],
+      [
+        'Dein Wort ist meines Fußes Leuchte und ein Licht auf meinem Wege.',
+        'Psalm 119,105'
+      ],
+      [
+        'Selig sind die Friedfertigen; denn sie werden Gottes Kinder heißen.',
+        'Matthäus 5,9'
+      ],
+      [
+        'Nun aber bleibt Glaube, Hoffnung, Liebe, diese drei; aber die Liebe ist die größte unter ihnen.',
+        '1. Korinther 13,13'
+      ]
+    ];
+
+    const reducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    );
+
+    // Goldene Lichtpunkte
+    const lights = document.createElement('div');
+    lights.className = 'lights';
+    lights.setAttribute('aria-hidden', 'true');
+
+    for (let i = 0; i < 12; i++) {
+      const light = document.createElement('span');
+
+      light.style.setProperty('--x', (8 + i * 7.5) + '%');
+      light.style.setProperty('--size', (4 + (i % 3) * 3) + 'px');
+      light.style.setProperty('--delay', (i * .16) + 's');
+
+      lights.appendChild(light);
+    }
+
+    document.querySelector('.hero').prepend(lights);
+
+    // Abschnitte beim Scrollen einblenden
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (!reducedMotion.matches) {
+              entry.target.animate(
+                [
+                  {
+                    opacity: .25,
+                    transform: 'translateY(22px)'
+                  },
+                  {
+                    opacity: 1,
+                    transform: 'translateY(0)'
+                  }
+                ],
+                {
+                  duration: 850,
+                  easing: 'ease-out'
+                }
+              );
+            }
+
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: .12
+      });
+
+      document.querySelectorAll('.wish, .card, .closing')
+        .forEach(section => observer.observe(section));
+    }
+
+    // Zufälliger Bibelvers ohne direkte Wiederholung
+    let current = 0;
+
+    document.getElementById('generate')
+      .addEventListener('click', () => {
+        current = (
+          current + 1 + Math.floor(Math.random() * (verses.length - 1))
+        ) % verses.length;
+
+        document.getElementById('text').textContent =
+          verses[current][0];
+
+        document.getElementById('reference').textContent =
+          verses[current][1];
+
+        if (!reducedMotion.matches) {
+          const verseArea =
+            document.getElementById('text').parentElement;
+
+          verseArea.getAnimations().forEach(animation => {
+            animation.cancel();
+          });
+
+          verseArea.animate(
+            [
+              {
+                opacity: 0,
+                transform: 'translateY(10px)'
+              },
+              {
+                opacity: 1,
+                transform: 'translateY(0)'
+              }
+            ],
+            {
+              duration: 500,
+              easing: 'ease-out'
+            }
+          );
+        }
+      });
+  </script>
+</body>
+</html>
