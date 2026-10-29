@@ -30,28 +30,44 @@
       font-family: system-ui, sans-serif;
     }
 
-    header {
-      max-width: 1100px;
-      margin: auto;
-      padding: 25px 6%;
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #dce0d2;
-    }
-
     a {
       color: inherit;
       text-decoration: none;
     }
 
+    header {
+      max-width: 1100px;
+      margin: auto;
+      padding: 25px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid #dce0d2;
+    }
+
+    /* Logo: Weißraum im Originalbild wird ausgeblendet */
     .brand {
-      font: italic 25px Georgia, serif;
+      display: block;
+      width: 168px;
+      height: 64px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border-radius: 6px;
+      background: white;
+    }
+
+    .brand-logo {
+      display: block;
+      width: 168px;
+      height: 165px;
+      max-width: none;
+      transform: translateY(-53px);
     }
 
     nav {
       font-size: 12px;
       letter-spacing: 1px;
-      padding-top: 8px;
     }
 
     .hero {
@@ -70,7 +86,7 @@
       z-index: 1;
     }
 
-    /* Gezeichnetes Kreuz: auch auf Handys goldfarben */
+    /* Goldfarbenes Kreuz für Computer und Handy */
     .cross {
       position: relative;
       width: 30px;
@@ -309,8 +325,31 @@
     }
 
     @media (max-width: 650px) {
+      header {
+        padding: 18px 6%;
+      }
+
+      .brand {
+        width: 126px;
+        height: 48px;
+      }
+
+      .brand-logo {
+        width: 126px;
+        height: 124px;
+        transform: translateY(-40px);
+      }
+
+      nav {
+        font-size: 10px;
+      }
+
       .hero {
         padding: 55px 22px;
+      }
+
+      h1 {
+        letter-spacing: -3px;
       }
 
       .wish {
@@ -326,14 +365,6 @@
 
       blockquote {
         min-height: 190px;
-      }
-
-      nav {
-        font-size: 10px;
-      }
-
-      h1 {
-        letter-spacing: -3px;
       }
     }
 
@@ -356,8 +387,17 @@
 
 <body>
   <header>
-    <a class="brand" href="#">Für Julia.</a>
-    <nav>
+    <a class="brand" href="#" aria-label="Flexstore – zum Anfang">
+      <img
+        class="brand-logo"
+        src="flexstore.jpg"
+        alt="Flexstore"
+        width="944"
+        height="926"
+      >
+    </a>
+
+    <nav aria-label="Hauptnavigation">
       <a href="#bibelverse">EIN VERS FÜR DICH ↗</a>
     </nav>
   </header>
@@ -418,6 +458,7 @@
     <section class="wish" id="wuensche">
       <div>
         <div class="eyebrow">Unsere Wünsche</div>
+
         <h2>
           Du bist geliebt.<br>
           Heute und immer.
@@ -453,7 +494,9 @@
 
     <section class="closing">
       <div class="cross" aria-hidden="true"></div>
+
       <h2>Ein Leben voller Segen.</h2>
+
       <p>
         Für dich, liebe Julia.<br>
         Für all die kleinen und großen Wunder, die vor dir liegen.
@@ -505,7 +548,7 @@
       '(prefers-reduced-motion: reduce)'
     );
 
-    // Goldene Lichtpunkte
+    // Goldene Lichtpunkte im oberen Bereich
     const lights = document.createElement('div');
     lights.className = 'lights';
     lights.setAttribute('aria-hidden', 'true');
@@ -522,7 +565,7 @@
 
     document.querySelector('.hero').prepend(lights);
 
-    // Abschnitte beim Scrollen einblenden
+    // Sanftes Einblenden beim Scrollen
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
