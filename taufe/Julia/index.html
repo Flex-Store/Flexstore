@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description"
         content="Alles Liebe zu deiner Taufe, Julia. Glückwünsche und Bibelverse für deinen Weg.">
+
   <title>Julia · Alles Liebe zur Taufe</title>
 
   <style>
@@ -46,23 +47,17 @@
       border-bottom: 1px solid #dce0d2;
     }
 
-    /* Logo: Weißraum im Originalbild wird ausgeblendet */
+    /* Transparentes Logo */
     .brand {
       display: block;
       width: 168px;
-      height: 64px;
-      overflow: hidden;
       flex-shrink: 0;
-      border-radius: 6px;
-      background: white;
     }
 
     .brand-logo {
       display: block;
-      width: 168px;
-      height: 165px;
-      max-width: none;
-      transform: translateY(-53px);
+      width: 100%;
+      height: auto;
     }
 
     nav {
@@ -86,7 +81,7 @@
       z-index: 1;
     }
 
-    /* Goldfarbenes Kreuz für Computer und Handy */
+    /* Goldfarbenes Kreuz, auch auf dem Handy */
     .cross {
       position: relative;
       width: 30px;
@@ -331,13 +326,6 @@
 
       .brand {
         width: 126px;
-        height: 48px;
-      }
-
-      .brand-logo {
-        width: 126px;
-        height: 124px;
-        transform: translateY(-40px);
       }
 
       nav {
@@ -390,10 +378,8 @@
     <a class="brand" href="#" aria-label="Flexstore – zum Anfang">
       <img
         class="brand-logo"
-        src="flexstore.jpg"
+        src="flexstore-transparent.png"
         alt="Flexstore"
-        width="944"
-        height="926"
       >
     </a>
 
@@ -403,7 +389,6 @@
   </header>
 
   <main>
-    <!-- Gratulation ganz oben -->
     <section class="hero">
       <div class="cross" aria-hidden="true"></div>
 
@@ -423,7 +408,6 @@
       </a>
     </section>
 
-    <!-- Bibelvers-Generator -->
     <section class="verses" id="bibelverse">
       <div class="eyebrow">Worte, die dich begleiten</div>
 
@@ -454,7 +438,6 @@
       </div>
     </section>
 
-    <!-- Persönliche Glückwünsche -->
     <section class="wish" id="wuensche">
       <div>
         <div class="eyebrow">Unsere Wünsche</div>
@@ -548,7 +531,7 @@
       '(prefers-reduced-motion: reduce)'
     );
 
-    // Goldene Lichtpunkte im oberen Bereich
+    // Goldene Lichtpunkte
     const lights = document.createElement('div');
     lights.className = 'lights';
     lights.setAttribute('aria-hidden', 'true');
@@ -565,7 +548,7 @@
 
     document.querySelector('.hero').prepend(lights);
 
-    // Sanftes Einblenden beim Scrollen
+    // Abschnitte beim Scrollen einblenden
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
